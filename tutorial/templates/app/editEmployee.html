@@ -1,0 +1,123 @@
+{% extends 'app/base.html' %}
+
+{% block main %}
+<div class="container">
+    <form>
+        {% csrf_token %}
+        <div class="form-group row">
+            <label for="firstName" class="col-sm-2 col-form-label">First Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="firstName" placeholder="First Name" value="{{ employee.emp_first_name }}">
+            </div>
+        </div>
+    
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">Last Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="lastName" placeholder="Last Name" value="{{ employee.emp_last_name }}">
+            </div>
+        </div>
+    
+        <div class="form-group row">
+            <label for="employeeDesignation" class="col-sm-2 col-form-label">Employee Designation</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="employeeDesignation" placeholder="Employee Designation" value="{{ employee.emp_designation }}">
+            </div>
+        </div>
+        
+        <!-- Hidden field to store employee ID -->
+        <input type="hidden" id="employeeId" value="{{ emp_id }}">
+    
+        <button type="button" class="btn btn-primary" id="employeeSubmitForm">Submit</button>
+    
+    </form>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    document.querySelector('#employeeSubmitForm').addEventListener('click', employeeForm);
+
+    function employeeForm(event){
+        event.preventDefault();
+        
+        const emp_id = document.getElementById('employeeId').value;
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const employeeDesignation = document.getElementById('employeeDesignation').value;
+
+        console.table([emp_id,firstName, lastName, employeeDesignation]);
+
+        const data = {
+            emp_first_name: firstName,
+            emp_last_name: lastName,
+            emp_designation: employeeDesignation
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: `{{ baseUrl }}/editemployee/${emp_id}`,
+            data: data,
+            success: function(response){
+                alert('Employee updated successfully');
+                $("#firstName").val('');
+                $("#lastName").val('');
+                $("#employeeDesignation").val('');
+                window.location.href = '{{ baseUrl }}/showdata';
+            },
+            error: function(xhr, status, error){
+                alert('An error occurred: ' + xhr.responseText);
+                console.error('Error details:', status, error);
+            }
+        });
+    }
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+<!-- <script>
+    document.querySelector('#employeeSubmitForm').addEventListener('click', employeeForm)
+
+    function employeeForm(){
+        // event.preventDefault();
+        let emp_id = '{{ emp_id }}'
+        alert(emp_id)
+        firstName = document.getElementById('firstName').value;
+        lastName = document.getElementById('lastName').value;
+        employeeDesignation = document.getElementById('employeeDesignation').value;
+
+        console.table([firstName,lastName,employeeDesignation])
+
+        var data = {
+            "emp_first_name":firstName,
+            "emp_last_name":lastName,
+            "emp_designation":employeeDesignation
+        }
+
+        $.ajax({
+            type:'POST',
+            url:`{{baseUrl}}/editemployee/${emp_id}`,
+            data:data,
+            success: function(response){
+                alert('Employee Updated successfully');
+                $("#firstName").val(firstName);
+                $("#lastName").val(lastName);
+                $("#employeeDesignation").val(employeeDesignation)
+
+                window.location.href = '{{baseUrl}}/showdata';
+            },
+            error: function(xhr, status, error){
+                alert('An error occurred: ' + xhr.responseText);
+                console.error('Error details:', status, error);
+            }
+
+        })
+    }
+</script> -->
