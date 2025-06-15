@@ -22,6 +22,7 @@
                 <th style="padding: 10px;">Sr.No.</th>
                 <th style="padding: 10px;">Employee Name</th>
                 <th style="padding: 10px;">Employee Designation</th>
+                <th style="padding: 10px;">Employee Skills</th>
                 <th style="padding: 10px;">Edit</th>
                 <th style="padding: 10px;">Delete</th>
                 <th style="padding: 10px;">Accept/Reject</th>
@@ -38,6 +39,18 @@
                         View Designation
                     </button>
                 </td>
+                <td>
+                    
+                    {% if i.skills %}
+                        {{ i.skills }}
+                    {% else %}
+                        No skills
+                    {% endif %}
+
+                </td>
+
+
+                
                 <td><a href="{{ baseUrl }}/editemployee/{{ i.emp_id }}"><i class="fas fa-edit" style="margin: 10px 15px;"></i></a></td>
                 <td><a href="{{ baseUrl }}/deleteemployee/{{ i.emp_id }}"><i class="fas fa-trash" style="margin: 10px 15px; cursor: pointer;"></i></a></td>
                 <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#acceptModal">Accept</button></td>

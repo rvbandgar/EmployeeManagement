@@ -5,30 +5,47 @@
     <form>
         {% csrf_token %}
         <div class="form-group row">
-            <label for="firstName" class="col-sm-2 col-form-label">First Name</label>
-            <div class="col-sm-10">
+            <label for="firstName" class="col-sm-2 mt-2 col-form-label">First Name</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="firstName" placeholder="First Name" value="{{ employee.emp_first_name }}">
             </div>
         </div>
     
         <div class="form-group row">
-            <label for="lastName" class="col-sm-2 col-form-label">Last Name</label>
-            <div class="col-sm-10">
+            <label for="lastName" class="col-sm-2 mt-2 col-form-label">Last Name</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="lastName" placeholder="Last Name" value="{{ employee.emp_last_name }}">
             </div>
         </div>
     
         <div class="form-group row">
-            <label for="employeeDesignation" class="col-sm-2 col-form-label">Employee Designation</label>
-            <div class="col-sm-10">
+            <label for="employeeDesignation" class="col-sm-2 mt-2 col-form-label">Employee Designation</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="employeeDesignation" placeholder="Employee Designation" value="{{ employee.emp_designation }}">
             </div>
         </div>
+
+        <div class="form-group row">
+            <label for="employeeSkills" class="col-sm-2 mt-2 col-form-label">Skills</label>
+            <div class="employeeSkills col-sm-8">
+
+                {% if all_skills %}
+                    {% for skill in all_skills %}
+                    <input type="checkbox" name="skills" value="{{ skill.skill_name }}" {% if skill.skill_name in skills %}checked{% endif %}>
+                    <label for="{{ skill }}">{{ skill.skill_name }}</label><br>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+
+
         
         <!-- Hidden field to store employee ID -->
         <input type="hidden" id="employeeId" value="{{ emp_id }}">
     
-        <button type="button" class="btn btn-primary" id="employeeSubmitForm">Submit</button>
+        <button type="button" class="btn btn-primary" id="employeeSubmitForm" style="margin-left: 35%;
+    margin-top: 2%;">Submit</button>
     
     </form>
 </div>
@@ -45,13 +62,21 @@
         const firstName = document.getElementById('firstName').value;
         const lastName = document.getElementById('lastName').value;
         const employeeDesignation = document.getElementById('employeeDesignation').value;
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        let selectedSkills = [];
+        document.querySelectorAll('.employeeSkills input[type=checkbox]:checked').forEach(skill => {
+        selectedSkills.push(skill.value);
+        });
 
-        console.table([emp_id,firstName, lastName, employeeDesignation]);
+
+        console.table([emp_id,firstName, lastName, employeeDesignation,selectedSkills]);
 
         const data = {
-            emp_first_name: firstName,
-            emp_last_name: lastName,
-            emp_designation: employeeDesignation
+            "emp_first_name": firstName,
+            "emp_last_name": lastName,
+            "emp_designation": employeeDesignation,
+            "skills": selectedSkills,
+            "csrfmiddlewaretoken": csrfToken
         };
 
         $.ajax({

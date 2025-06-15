@@ -28,13 +28,20 @@
 
         <div class="form-group row">
             <label for="employeeSkills" class="col-sm-2 mt-2 col-form-label" >Skills</label>
-            <div class="col-sm-8">
-                <input type="checkbox"   name="Python" value="Python" checked>
+            <div class="employeeSkills col-sm-8">
+                {% if skills %}
+                {% for skill in skills %}
+                    <input type="checkbox" name="{{skill}}" value="{{skill}}">
+                    <label for="{{skill}}" >{{skill}}</label><br>
+                    <!-- {{skill}} -->
+                {% endfor %}
+                {% endif %}
+                <!-- <input type="checkbox"   name="Python" value="Python" checked>
                 <label for="Python" class="col-sm-2" >Python</label><br>
                 <input type="checkbox"  name="Django" value="Django">
                 <label for="Django" >Django</label><br>
                 <input type="checkbox"  name="HTML" value="HTML">
-                <label for="HTML" >HTML</label><br>
+                <label for="HTML" >HTML</label><br> -->
             </div>
         </div>
     
@@ -63,6 +70,8 @@
 
 {% block js %}
 <script>
+    
+
     document.querySelector('#employeeSubmitForm').addEventListener('click', employeeForm)
 
     function employeeForm(event){
@@ -70,13 +79,21 @@
         firstName = document.getElementById('firstName').value;
         lastName = document.getElementById('lastName').value;
         employeeDesignation = document.getElementById('employeeDesignation').value;
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        let selectedSkills = [];
+        document.querySelectorAll('.employeeSkills input[type=checkbox]:checked').forEach(skill => {
+        selectedSkills.push(skill.value);
+        });
 
-        console.table([firstName,lastName,employeeDesignation])
+        console.table([firstName,lastName,employeeDesignation,selectedSkills])
 
         const data = {
             "emp_first_name":firstName,
             "emp_last_name":lastName,
-            "emp_designation":employeeDesignation
+            "emp_designation":employeeDesignation,
+            "skills":selectedSkills,
+            "csrfmiddlewaretoken": csrfToken
+
         }
 
         $.ajax({
