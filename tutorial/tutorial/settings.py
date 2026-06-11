@@ -31,9 +31,10 @@ print(f'BASE DIR++++++++++{BASE_DIR}')
 SECRET_KEY = 'django-insecure-vlw)kpzh4^2b$f3)55j8a*(*^n132fpjog7lex6a&sxv2i_ijw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*','127.0.0.1']
 
 
 # Application definition
@@ -82,6 +83,13 @@ WSGI_APPLICATION = 'tutorial.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -93,6 +101,18 @@ DATABASES = {
         
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'employee_management',
+#         'USER':'root',
+#         'PASSWORD':'R@me$h1234',
+#         'HOST':'localhost',
+#         'PORT':3306
+        
+#     }
+# }
 
 
 # Password validation
@@ -113,6 +133,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -131,7 +157,37 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = BASE_DIR / 'STATICFILES'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Define the absolute path to the directory where user-uploaded files will be stored
+MEDIA_ROOT = BASE_DIR / 'uploads' # Or os.path.join(BASE_DIR, 'uploads') for older Django versions
+
+# Define the URL prefix that will serve the media files
+MEDIA_URL = '/media/'
+
+
+# MEDIA_ROOT: This is the absolute file system path to the directory where Django will save uploaded files 
+# (e.g., images, documents). Files are physically stored here.
+
+# MEDIA_URL: This is the public URL from which these media files can be accessed in a web browser. 
+# It helps distinguish media files from static files and other URLs. 
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}

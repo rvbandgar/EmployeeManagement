@@ -1,0 +1,140 @@
+=====================================================
+WITH cte AS (
+    SELECT 
+        customerName, 
+        COUNT(*) AS orderCount
+    FROM
+        orders
+    INNER JOIN customers 
+        USING (customerNumber)
+    GROUP BY customerName
+)
+SELECT 
+    customerName, 
+    orderCount,
+    CASE 
+        WHEN orderCount = 1 THEN 'One-time Customer'
+        WHEN orderCount = 2 THEN 'Repeated Customer'
+        WHEN orderCount = 3 THEN 'Frequent Customer'
+        ELSE 'Loyal Customer'
+    END AS customerType
+FROM
+    cte
+ORDER BY 
+    customerName;
+=====================================================
+SELECT 
+    customerName, 
+    orderCount,
+    CASE 
+        WHEN orderCount = 1 THEN 'One-time Customer'
+        WHEN orderCount = 2 THEN 'Repeated Customer'
+        WHEN orderCount = 3 THEN 'Frequent Customer'
+        ELSE 'Loyal Customer'
+    END AS customerType
+FROM (
+    SELECT 
+        customerName, 
+        COUNT(*) AS orderCount
+    FROM
+        orders
+    INNER JOIN customers 
+        USING (customerNumber)
+    GROUP BY customerName
+) AS subquery
+ORDER BY 
+    customerName;
+
+
+=====================================================
+desc products;
+
+select format(avg(buyPrice),2) AverageBuyPrice from products;
+
+select productline, avg(buyPrice) from products group by productLine order by productLine;
+
+
+select max(amount) 'largest payment of 2024'
+from payments
+where year(paymentDate)=2004;
+
+
+SELECT 
+    lastName, firstName
+FROM
+    employees
+WHERE
+    officeCode IN (SELECT 
+            officeCode
+        FROM
+            offices
+        WHERE
+            country = 'USA');
+
+
+
+=====================================================
+SELECT 
+        AVG(buyprice) pl_avg
+    FROM
+        products
+    GROUP BY productline;
+    
+SELECT 
+     COUNT(buyprice) - COUNT(DISTINCT buyprice)
+FROM
+    products;
+=====================================================
+-- show tables;
+-- select * from customers;
+-- desc products;
+-- SELECT 
+--     AVG(buyPrice) average_buy_price
+-- FROM 
+--     products;
+
+-- select productLine,avg(buyprice) from products group by productLine;
+-- select avg()
+
+select * from products;
+select * from orderdetails;
+SELECT 
+    productCode,
+    productName,
+    SUM(priceEach * quantityOrdered) total
+FROM
+    orderdetails
+        INNER JOIN
+    products USING (productCode)
+GROUP BY productCode
+ORDER BY total;
+=====================================================
+-- call GetCustomers()
+
+-- CALL GetOfficeByCountry('France');
+
+-- SELECT * FROM orders;
+
+CALL GetOrderCountByStatus('Shipped',@total);
+SELECT @total;
+
+CALL GetOrderCountByStatus('In Process',@total);
+SELECT @total AS total_in_process;
+
+
+-- CALL uspFindProducts(90,100,"1968 Ford Mustang");
+
+-- SELECT
+--     productName,
+--     buyPrice
+-- FROM 
+--     products
+-- ORDER BY
+--     buyPrice;
+
+-- desc products;
+=====================================================
+=====================================================
+=====================================================
+=====================================================
+

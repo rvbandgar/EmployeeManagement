@@ -9,6 +9,7 @@ class Employee(models.Model):
     emp_last_name = models.CharField(max_length=100, null=True, blank=True)
     emp_designation = models.CharField(max_length=100, null=True, blank=True)
     skills = models.CharField(max_length=100, null=True, blank=True)
+    experience=models.FloatField(null=True)
 
     # class Meta:
     #     db_table='app_employee'
@@ -36,3 +37,12 @@ class EmployeeSkills(models.Model):
 
     def __str__(self):
         return self.skill_name
+
+
+class EducationalQualification(models.Model):
+    qualification_name=models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.qualification_name
+    
+
